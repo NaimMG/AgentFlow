@@ -5,25 +5,26 @@ from langchain_ollama import ChatOllama
 from langchain_community.tools import DuckDuckGoSearchRun
 from langchain_core.messages import HumanMessage
 from agent1_research.state import ResearchState
+from shared.error_handler import retry_with_backoff, safe_node, logger
 
 load_dotenv()
 
 
 def get_llm():
-    """Groq par défaut, Ollama en fallback si pas de clé API."""
+    """Groq par défaut, Ollama en fallback."""
     groq_key = os.getenv("GROQ_API_KEY")
     if groq_key:
-        print("🚀 LLM : Groq (llama-3.3-70b)")
+        logger.info("LLM : Groq (llama-3.3-70b)")
         return ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
-    print("🏠 LLM : Ollama (llama3.2 local)")
+    logger.info("LLM : Ollama (llama3.2 local)")
     return ChatOllama(model="llama3.2:latest", temperature=0)
 
 
-# Initialisation
 llm = get_llm()
 search_tool = DuckDuckGoSearchRun()
 
 
+@safe_node(fallback_message="Erreur lors de la planification.")
 def planner_node(state: ResearchState) -> dict:
     """Planifie la stratégie de recherche à partir de la question."""
     response = llm.invoke([
@@ -41,9 +42,17 @@ def planner_node(state: ResearchState) -> dict:
     }
 
 
+@retry_with_backoff(max_retries=3, base_delay=2.0, exceptions=(Exception,))
+def _search_with_retry(query: str) -> str:
+    """Recherche web avec retry automatique."""
+    return search_tool.run(query)
+
+
+@safe_node(fallback_message="Erreur lors de la recherche web.")
 def search_node(state: ResearchState) -> dict:
     """Exécute une recherche web avec DuckDuckGo."""
-    results = search_tool.run(state["query"])
+    logger.info(f"Recherche web : {state['query']}")
+    results = _search_with_retry(state["query"])
     current_results = state.get("search_results", [])
     return {
         "search_results": current_results + [results],
@@ -51,6 +60,7 @@ def search_node(state: ResearchState) -> dict:
     }
 
 
+@safe_node(fallback_message="Erreur lors de la synthèse.")
 def synthesizer_node(state: ResearchState) -> dict:
     """Synthétise les résultats de recherche en une réponse claire."""
     context = "\n\n---\n\n".join(state["search_results"][-3:])
@@ -61,7 +71,7 @@ def synthesizer_node(state: ResearchState) -> dict:
         Résultats de recherche :
         {context}
 
-        Donne une réponse complète, structurée et sourcée.
+        Donne une réponse complète et structurée.
         Si les informations sont insuffisantes, commence par "NEED_MORE_INFO".
         """)
     ])
