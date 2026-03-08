@@ -1,0 +1,19 @@
+date,produit,categorie,ventes,prix_unitaire,region
+2024-01-15,Laptop Pro,Electronique,45,1299.99,Paris
+2024-01-15,Smartphone X,Electronique,120,799.99,Lyon
+2024-01-15,Chaise Bureau,Mobilier,30,299.99,Paris
+2024-02-10,Laptop Pro,Electronique,52,1299.99,Marseille
+2024-02-10,Tablette Y,Electronique,85,499.99,Paris
+2024-02-10,Bureau Standing,Mobilier,18,599.99,Lyon
+2024-03-05,Smartphone X,Electronique,140,799.99,Paris
+2024-03-05,Laptop Pro,Electronique,61,1299.99,Lyon
+2024-03-05,Lampe LED,Mobilier,95,49.99,Marseille
+2024-04-20,Tablette Y,Electronique,92,499.99,Lyon
+2024-04-20,Chaise Bureau,Mobilier,45,299.99,Paris
+2024-04-20,Smartphone X,Electronique,155,799.99,Marseille
+2024-05-15,Laptop Pro,Electronique,70,1299.99,Paris
+2024-05-15,Bureau Standing,Mobilier,25,599.99,Marseille
+2024-05-15,Lampe LED,Mobilier,110,49.99,Lyon
+2024-06-01,Smartphone X,Electronique,180,799.99,Paris
+2024-06-01,Tablette Y,Electronique,98,499.99,Marseille
+2024-06-01,Laptop Pro,Electronique,65,1299.99,Lyon
