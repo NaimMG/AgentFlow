@@ -4,7 +4,7 @@ from langchain_core.messages import HumanMessage
 from agent1_research.state import ResearchState
 
 # LLM local via Ollama
-llm = ChatOllama(model="llama3.1:8b", temperature=0)
+llm = ChatOllama(model="llama3.2:latest", temperature=0)
 
 # Outil de recherche web gratuit
 search_tool = DuckDuckGoSearchRun()
