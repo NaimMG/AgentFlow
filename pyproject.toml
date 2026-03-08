@@ -16,9 +16,11 @@ agent1 = [
     "rich>=13.0.0",
 ]
 
+[tool.setuptools.package-dir]
+"" = "src"
+
 [tool.setuptools.packages.find]
-include = ["shared*", "agent*"]
-exclude = ["AgentFlow*"]
+where = ["src"]
 
 [build-system]
 requires = ["setuptools>=42", "wheel"]

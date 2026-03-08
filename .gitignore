@@ -5,17 +5,16 @@ AgentFlow/
 __pycache__/
 *.pyc
 *.pyo
-.Python
 *.egg-info/
 
 # Env vars
 .env
 
-# Data & DBs
+# Data
 chroma_db/
 *.db
 
-# ML tracking
+# ML
 mlruns/
 
 # Jupyter
