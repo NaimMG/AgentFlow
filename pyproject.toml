@@ -27,3 +27,13 @@ where = ["src"]
 [build-system]
 requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project.optional-dependencies.dev]
+dev = [
+    "pytest>=9.0.0",
+    "pytest-mock>=3.0.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

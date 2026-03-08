@@ -119,4 +119,5 @@ Mentionne quel agent a traité la demande et pourquoi.
 
 def route_to_agent(state: OrchestratorState) -> str:
     """Route vers le bon agent selon la décision du supervisor."""
-    return state.get("selected_agent", "research")
+    selected = state.get("selected_agent", "research")
+    return selected if selected in ("research", "analyst") else "research"
