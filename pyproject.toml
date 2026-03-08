@@ -10,6 +10,7 @@ agent1 = [
     "langchain>=0.3.0",
     "langchain-community>=0.3.0",
     "langchain-ollama>=0.2.0",
+    "langchain-groq>=0.2.0",
     "duckduckgo-search>=6.0.0",
     "ddgs>=0.1.0",
     "gradio>=4.0.0",

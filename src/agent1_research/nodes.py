@@ -1,12 +1,26 @@
+import os
+from dotenv import load_dotenv
+from langchain_groq import ChatGroq
 from langchain_ollama import ChatOllama
 from langchain_community.tools import DuckDuckGoSearchRun
 from langchain_core.messages import HumanMessage
 from agent1_research.state import ResearchState
 
-# LLM local via Ollama
-llm = ChatOllama(model="llama3.2:latest", temperature=0)
+load_dotenv()
 
-# Outil de recherche web gratuit
+
+def get_llm():
+    """Groq par défaut, Ollama en fallback si pas de clé API."""
+    groq_key = os.getenv("GROQ_API_KEY")
+    if groq_key:
+        print("🚀 LLM : Groq (llama-3.3-70b)")
+        return ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
+    print("🏠 LLM : Ollama (llama3.2 local)")
+    return ChatOllama(model="llama3.2:latest", temperature=0)
+
+
+# Initialisation
+llm = get_llm()
 search_tool = DuckDuckGoSearchRun()
 
 
@@ -47,7 +61,7 @@ def synthesizer_node(state: ResearchState) -> dict:
         Résultats de recherche :
         {context}
 
-        Donne une réponse complète et structurée.
+        Donne une réponse complète, structurée et sourcée.
         Si les informations sont insuffisantes, commence par "NEED_MORE_INFO".
         """)
     ])
