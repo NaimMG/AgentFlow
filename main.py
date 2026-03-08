@@ -2,13 +2,14 @@ from dotenv import load_dotenv
 from rich.console import Console
 from rich.panel import Panel
 from agent1_research.graph import build_graph
+from shared.observability import trace_agent_run
 
 load_dotenv()
 console = Console()
 
 
 def run_agent(query: str, max_iterations: int = 3):
-    """Lance le Research Agent sur une question."""
+    """Lance le Research Agent avec tracking Langfuse."""
 
     console.print(Panel(f"[bold blue]🔍 Question :[/bold blue] {query}"))
 
@@ -23,11 +24,21 @@ def run_agent(query: str, max_iterations: int = 3):
         "max_iterations": max_iterations
     })
 
+    trace_agent_run(
+        agent_name="research_agent",
+        query=query,
+        result={
+            "iterations": result["iterations"],
+            "synthesis": result["synthesis"]
+        }
+    )
+
     console.print(Panel(
         f"[bold green]✅ Réponse après {result['iterations']} itération(s) :[/bold green]\n\n{result['synthesis']}",
         title="Résultat",
         border_style="green"
     ))
+    console.print(f"\n[dim]📊 Dashboard : http://localhost:3000[/dim]")
 
     return result
 
