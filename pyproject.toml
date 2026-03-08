@@ -1,0 +1,21 @@
+[project]
+name = "agentflow"
+version = "0.1.0"
+description = "AI Agents portfolio with LangGraph"
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+agent1 = [
+    "langgraph>=0.2.0",
+    "langchain>=0.3.0",
+    "langchain-community>=0.3.0",
+    "langchain-ollama>=0.2.0",
+    "duckduckgo-search>=6.0.0",
+    "gradio>=4.0.0",
+    "python-dotenv>=1.0.0",
+    "rich>=13.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends.legacy:build"

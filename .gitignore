@@ -1,0 +1,25 @@
+# Virtual env
+AgentFlow/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.Python
+*.egg-info/
+
+# Env vars
+.env
+
+# Data & DBs
+chroma_db/
+*.db
+
+# ML tracking
+mlruns/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
