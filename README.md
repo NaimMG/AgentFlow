@@ -39,11 +39,26 @@ planner → web_search → synthesizer → [continue?] → web_search
 - Interface Gradio interactive
 - Fallback Ollama si pas de clé Groq
 
-### 🔜 Agent 2 — Data Analyst Agent
-*(En cours)*
+### ✅ Agent 2 — Data Analyst Agent
+Agent d'analyse de données avec génération automatique de code et visualisations.
 
-### 🔜 Agent 3 — Multi-Agent Orchestrator
-*(Prévu)*
+**Stack :** LangGraph · Groq llama-3.3-70b · Pandas · Matplotlib · Gradio
+
+**Fonctionnalités :**
+- Upload CSV et questions en langage naturel
+- Génération et exécution automatique de code Python
+- Visualisations matplotlib affichées dans l'UI
+- Auto-retry si erreur de code (max 3 tentatives)
+
+### ✅ Agent 3 — Multi-Agent Orchestrator
+Supervisor intelligent qui route automatiquement vers le bon agent.
+
+**Stack :** LangGraph · Groq llama-3.3-70b · Agent1 · Agent2
+
+**Fonctionnalités :**
+- Routing automatique : Research vs Analyst
+- Décision expliquée à l'utilisateur
+- Fallback intelligent si CSV absent
 
 ---
 
