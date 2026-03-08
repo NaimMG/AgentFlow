@@ -1,6 +1,6 @@
 # 🤖 AgentFlow — AI Agents Portfolio
 
-> Portfolio de 3 agents autonomes construits avec LangGraph, 100% open-source.
+> Portfolio de 3 agents autonomes construits avec LangGraph.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
 ![LangGraph](https://img.shields.io/badge/LangGraph-1.0+-green)
@@ -44,6 +44,13 @@ Agent d'analyse de données avec génération automatique de code et visualisati
 
 **Stack :** LangGraph · Groq llama-3.3-70b · Pandas · Matplotlib · Gradio
 
+**Architecture :**
+```
+loader → code_generator → code_executor → [erreur?] → code_generator
+                                               ↓
+                                            answer → END
+```
+
 **Fonctionnalités :**
 - Upload CSV et questions en langage naturel
 - Génération et exécution automatique de code Python
@@ -55,9 +62,15 @@ Supervisor intelligent qui route automatiquement vers le bon agent.
 
 **Stack :** LangGraph · Groq llama-3.3-70b · Agent1 · Agent2
 
+**Architecture :**
+```
+supervisor → [research?] → research_agent → synthesizer → END
+           → [analyst?]  → analyst_agent  → synthesizer → END
+```
+
 **Fonctionnalités :**
 - Routing automatique : Research vs Analyst
-- Décision expliquée à l'utilisateur
+- Décision et justification expliquées à l'utilisateur
 - Fallback intelligent si CSV absent
 
 ---
@@ -70,22 +83,30 @@ cd AgentFlow
 
 # Créer l'environnement virtuel
 python -m venv AgentFlow
-source AgentFlow/bin/activate
+source AgentFlow/bin/activate  # Linux/Mac
+# AgentFlow\Scripts\activate   # Windows
 
 # Installer les dépendances
 pip install -e ".[agent1]"
+pip install ddgs pandas matplotlib seaborn tabulate langchain-groq
 
 # Configurer les variables d'environnement
 cp .env.example .env
-# Ajouter GROQ_API_KEY dans .env
+# Ajouter GROQ_API_KEY=ta_clé dans .env
 ```
 
-## ▶️ Lancer l'Agent 1
+## ▶️ Lancer les agents
 ```bash
-# Interface Gradio
+# Agent 1 — Research Agent
 python app.py
 
-# CLI
+# Agent 2 — Data Analyst Agent
+python app2.py
+
+# Agent 3 — Multi-Agent Orchestrator
+python app3.py
+
+# CLI Agent 1
 python main.py
 ```
 
@@ -97,9 +118,10 @@ python main.py
 |---|---|
 | Agent Framework | LangGraph 1.0 |
 | LLM principal | Groq llama-3.3-70b (free tier) |
-| LLM local | Ollama llama3.2 |
+| LLM local fallback | Ollama llama3.2 |
 | Search Tool | DuckDuckGo |
-| UI | Gradio |
+| Data Analysis | Pandas · Matplotlib |
+| UI | Gradio 6 |
 | Versionning | Git + GitHub |
 
 ---
@@ -109,14 +131,25 @@ python main.py
 AgentFlow/
 ├── src/
 │   ├── agent1_research/
-│   │   ├── state.py      # ResearchState TypedDict
-│   │   ├── nodes.py      # planner, search, synthesizer
-│   │   └── graph.py      # LangGraph StateGraph
+│   │   ├── state.py          # ResearchState TypedDict
+│   │   ├── nodes.py          # planner, search, synthesizer
+│   │   └── graph.py          # LangGraph StateGraph
+│   ├── agent2_analyst/
+│   │   ├── state.py          # AnalystState TypedDict
+│   │   ├── nodes.py          # loader, code_generator, executor, answer
+│   │   └── graph.py          # LangGraph StateGraph
+│   ├── agent3_orchestrator/
+│   │   ├── state.py          # OrchestratorState TypedDict
+│   │   ├── nodes.py          # supervisor, research, analyst, synthesizer
+│   │   └── graph.py          # LangGraph StateGraph
 │   └── shared/
-├── tests/
 ├── docs/
-├── app.py                # Interface Gradio
-├── main.py               # CLI
+│   └── sample_data.csv       # Dataset de test
+├── tests/
+├── app.py                    # UI Agent 1
+├── app2.py                   # UI Agent 2
+├── app3.py                   # UI Agent 3 (Orchestrator)
+├── main.py                   # CLI Agent 1
 └── pyproject.toml
 ```
 
