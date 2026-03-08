@@ -6,6 +6,7 @@ from langchain_core.messages import HumanMessage
 from agent3_orchestrator.state import OrchestratorState
 from agent1_research.graph import build_graph as build_research_graph
 from agent2_analyst.graph import build_analyst_graph
+from shared.observability import trace_agent_run
 
 load_dotenv()
 
@@ -111,6 +112,18 @@ Présente une réponse finale claire et professionnelle.
 Mentionne quel agent a traité la demande et pourquoi.
         """)
     ])
+
+    # Tracking Langfuse
+    trace_agent_run(
+        agent_name="orchestrator_agent",
+        query=state["query"],
+        result={
+            "selected_agent": state["selected_agent"],
+            "routing_reason": state["routing_reason"],
+            "response": response.content[:200]
+        }
+    )
+
     return {
         "final_response": response.content,
         "messages": [response]

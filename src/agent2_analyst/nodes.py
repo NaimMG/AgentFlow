@@ -10,6 +10,7 @@ from langchain_groq import ChatGroq
 from langchain_ollama import ChatOllama
 from langchain_core.messages import HumanMessage
 from agent2_analyst.state import AnalystState
+from shared.observability import trace_agent_run
 
 load_dotenv()
 
@@ -117,15 +118,27 @@ def answer_node(state: AnalystState) -> dict:
     """Formule la réponse finale en langage naturel."""
     response = llm.invoke([
         HumanMessage(content=f"""
-Question originale : {state['query']}
+        Question originale : {state['query']}
 
-Résultat de l'analyse :
-{state['execution_result']}
+        Résultat de l'analyse :
+        {state['execution_result']}
 
-Formule une réponse claire, structurée et professionnelle en français.
-Inclus les chiffres clés et insights importants.
+        Formule une réponse claire, structurée et professionnelle en français.
+        Inclus les chiffres clés et insights importants.
         """)
     ])
+
+    # Tracking Langfuse
+    trace_agent_run(
+        agent_name="analyst_agent",
+        query=state["query"],
+        result={
+            "execution_result": state["execution_result"][:200],
+            "chart_generated": bool(state.get("chart_path")),
+            "attempts": state.get("attempts", 0)
+        }
+    )
+
     return {
         "final_answer": response.content,
         "messages": [response]
