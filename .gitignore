@@ -20,5 +20,8 @@ mlruns/
 # Jupyter
 .ipynb_checkpoints/
 
+# Generated files
+output_chart.png
+
 # OS
 .DS_Store
