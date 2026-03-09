@@ -112,6 +112,24 @@ pytest tests/ -v
 
 ---
 
+## 🎯 Evaluation Automatique — LLM-as-a-Judge
+
+Les agents sont évalués automatiquement via **Groq llama-3.3-70b** comme juge :
+```bash
+python -m evaluation.run_eval
+```
+
+| Agent | Pertinence | Qualité | Factualité | Global |
+|---|---|---|---|---|
+| Research Agent | 0.87 | 0.77 | 0.68 | 0.77 |
+| Data Analyst Agent | 0.93 | 0.80 | 1.00 | 0.91 |
+| **Moyenne** | | | | **0.84/1.0** |
+
+3 critères mesurés automatiquement :
+- **Pertinence** : la réponse répond-elle à la question ?
+- **Qualité** : clarté et structure de la réponse
+- **Factualité** : présence des éléments attendus
+
 ## 🚀 Installation
 ```bash
 # Cloner le repo
@@ -205,6 +223,10 @@ AgentFlow/
 ├── docker-compose.yml        # Langfuse + PostgreSQL
 ├── .env.example              # Template configuration
 └── pyproject.toml
+├── evaluation/
+│   ├── dataset.py            # 6 questions/réponses attendues
+│   ├── judge.py              # LLM-as-a-Judge scorer
+│   └── run_eval.py           # Pipeline d'évaluation complet
 ```
 
 ---
